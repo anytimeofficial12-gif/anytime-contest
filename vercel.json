@@ -3,11 +3,11 @@
   "name": "anytime-contest-landing",
   "builds": [
     { "src": "index.html", "use": "@vercel/static" },
-    { "src": "api/index.py", "use": "@vercel/python" }
+    { "src": "api/app.py", "use": "@vercel/python" }
   ],
-  "rewrites": [
-    { "source": "/api/(.*)", "destination": "/api/index.py" },
-    { "source": "/(.*)", "destination": "/index.html" }
+  "routes": [
+    { "src": "/api/(.*)", "dest": "/api/app.py" },
+    { "src": "/(.*)", "dest": "/index.html" }
   ],
   "headers": [
     {
