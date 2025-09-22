@@ -1,0 +1,448 @@
+/* Reset and Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+    color: #ffffff;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+/* Container */
+.container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    position: relative;
+}
+
+/* Logo Section */
+.logo-section {
+    margin-bottom: 60px;
+    animation: fadeInUp 1s ease-out;
+}
+
+.logo-container {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.logo {
+    max-width: 200px;
+    height: auto;
+    filter: drop-shadow(0 0 20px rgba(0, 255, 0, 0.3));
+    animation: pulseGlow 2s ease-in-out infinite alternate;
+}
+
+@keyframes pulseGlow {
+    0% {
+        filter: drop-shadow(0 0 20px rgba(0, 255, 0, 0.3));
+        transform: scale(1);
+    }
+    100% {
+        filter: drop-shadow(0 0 30px rgba(0, 255, 0, 0.6));
+        transform: scale(1.02);
+    }
+}
+
+/* Form Container */
+.form-container {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.8s ease-out;
+    max-width: 500px;
+    width: 100%;
+}
+
+.form-container.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.form-wrapper {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 40px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+}
+
+.contest-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 10px;
+    background: linear-gradient(135deg, #00ff88, #00cc6a);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.contest-subtitle {
+    font-size: 1.1rem;
+    text-align: center;
+    margin-bottom: 40px;
+    color: #cccccc;
+    font-weight: 300;
+}
+
+/* Form Styles */
+.contest-form {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.form-group label {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #e0e0e0;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.form-group input,
+.form-group textarea {
+    padding: 15px 20px;
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.05);
+    color: #ffffff;
+    font-size: 1rem;
+    font-family: inherit;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(5px);
+    resize: vertical;
+    min-height: 50px;
+}
+
+.form-group textarea {
+    min-height: 100px;
+    line-height: 1.5;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: #00ff88;
+    box-shadow: 0 0 0 3px rgba(0, 255, 136, 0.1);
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+    color: #888888;
+}
+
+/* Submit Button */
+.submit-btn {
+    padding: 18px 30px;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #000000;
+    background: linear-gradient(135deg, #00ff88, #00cc6a);
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: inherit;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-top: 10px;
+    position: relative;
+    overflow: hidden;
+}
+
+.submit-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(0, 255, 136, 0.3);
+    background: linear-gradient(135deg, #00ff99, #00dd77);
+}
+
+.submit-btn:active {
+    transform: translateY(0);
+}
+
+.submit-btn:disabled {
+    background: #666666;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+/* Decline Message */
+.decline-message {
+    text-align: center;
+    color: #ff6b6b;
+    font-size: 1.1rem;
+    font-weight: 500;
+    margin-top: 20px;
+    padding: 15px;
+    background: rgba(255, 107, 107, 0.1);
+    border-radius: 8px;
+    border: 1px solid rgba(255, 107, 107, 0.2);
+}
+
+/* Success Message */
+.success-message {
+    text-align: center;
+    animation: fadeInUp 0.8s ease-out;
+}
+
+.success-message h2 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, #00ff88, #00cc6a);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 20px;
+}
+
+/* Modal Styles */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(5px);
+    animation: fadeIn 0.3s ease-out;
+}
+
+.modal.show {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-content {
+    background: linear-gradient(135deg, #1a1a1a, #2a2a2a);
+    border-radius: 20px;
+    width: 90%;
+    max-width: 600px;
+    max-height: 80vh;
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    animation: slideInUp 0.4s ease-out;
+    display: flex;
+    flex-direction: column;
+}
+
+.modal-header {
+    padding: 25px 30px 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.modal-header h2 {
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: #ffffff;
+    text-align: center;
+}
+
+.modal-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px 30px;
+}
+
+.terms-text {
+    line-height: 1.6;
+    color: #e0e0e0;
+}
+
+.terms-text h3 {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #00ff88;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.terms-text h4 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #ffffff;
+    margin: 25px 0 10px 0;
+}
+
+.terms-text p {
+    margin-bottom: 15px;
+    font-size: 0.95rem;
+}
+
+.modal-footer {
+    padding: 20px 30px 25px;
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.btn-accept, .btn-decline {
+    padding: 12px 30px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: inherit;
+    min-width: 120px;
+}
+
+.btn-accept {
+    background: linear-gradient(135deg, #00ff88, #00cc6a);
+    color: #000000;
+}
+
+.btn-accept:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0, 255, 136, 0.3);
+}
+
+.btn-decline {
+    background: #666666;
+    color: #ffffff;
+}
+
+.btn-decline:hover {
+    background: #777777;
+    transform: translateY(-2px);
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .container {
+        padding: 15px;
+    }
+    
+    .logo {
+        max-width: 150px;
+    }
+    
+    .form-wrapper {
+        padding: 30px 25px;
+    }
+    
+    .contest-title {
+        font-size: 2rem;
+    }
+    
+    .contest-subtitle {
+        font-size: 1rem;
+    }
+    
+    .modal-content {
+        width: 95%;
+        margin: 20px;
+    }
+    
+    .modal-header, .modal-body, .modal-footer {
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+    
+    .modal-footer {
+        flex-direction: column;
+    }
+    
+    .btn-accept, .btn-decline {
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .logo {
+        max-width: 120px;
+    }
+    
+    .form-wrapper {
+        padding: 25px 20px;
+    }
+    
+    .contest-title {
+        font-size: 1.8rem;
+    }
+    
+    .submit-btn {
+        padding: 15px 25px;
+        font-size: 1.1rem;
+    }
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* Focus styles for accessibility */
+button:focus,
+input:focus {
+    outline: 2px solid #00ff88;
+    outline-offset: 2px;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+    .form-group input {
+        border-color: #ffffff;
+    }
+    
+    .modal-content {
+        border: 2px solid #ffffff;
+    }
+}

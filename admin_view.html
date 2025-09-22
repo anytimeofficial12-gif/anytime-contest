@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ANYTIME Contest - Admin View</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a52);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 2.5em;
+            font-weight: 700;
+        }
+        .header p {
+            margin: 10px 0 0 0;
+            opacity: 0.9;
+        }
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            padding: 30px;
+            background: #f8f9fa;
+            border-bottom: 1px solid #e9ecef;
+        }
+        .stat-card {
+            text-align: center;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            min-width: 150px;
+        }
+        .stat-number {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #ff6b6b;
+            margin: 0;
+        }
+        .stat-label {
+            color: #666;
+            margin: 5px 0 0 0;
+            font-size: 0.9em;
+        }
+        .content {
+            padding: 30px;
+        }
+        .controls {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        .btn-success {
+            background: linear-gradient(135deg, #00ff88, #00cc6a);
+            color: white;
+        }
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 255, 136, 0.4);
+        }
+        .btn-info {
+            background: linear-gradient(135deg, #4a90e2, #357abd);
+            color: white;
+        }
+        .btn-info:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(74, 144, 226, 0.4);
+        }
+        .submissions-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .submissions-table th {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+        .submissions-table td {
+            padding: 15px;
+            border-bottom: 1px solid #e9ecef;
+        }
+        .submissions-table tr:hover {
+            background: #f8f9fa;
+        }
+        .submission-id {
+            font-family: monospace;
+            background: #e9ecef;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.8em;
+        }
+        .answer-cell {
+            max-width: 300px;
+            word-wrap: break-word;
+        }
+        .timestamp {
+            color: #666;
+            font-size: 0.9em;
+        }
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        .success {
+            background: #d4edda;
+            color: #155724;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        .no-submissions {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+        .no-submissions h3 {
+            color: #999;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎯 ANYTIME Contest</h1>
+            <p>Admin Dashboard - View Contest Submissions</p>
+        </div>
+        
+        <div class="stats" id="stats">
+            <div class="stat-card">
+                <div class="stat-number" id="totalSubmissions">-</div>
+                <div class="stat-label">Total Submissions</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="todaySubmissions">-</div>
+                <div class="stat-label">Today's Submissions</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="storageMethod">-</div>
+                <div class="stat-label">Storage Method</div>
+            </div>
+        </div>
+        
+        <div class="content">
+            <div class="controls">
+                <button class="btn btn-primary" onclick="loadSubmissions()">🔄 Refresh Data</button>
+                <button class="btn btn-success" onclick="syncGoogleSheets()">🔄 Sync Google Sheets</button>
+                <button class="btn btn-success" onclick="downloadCSV()">📥 Download CSV</button>
+                <a href="http://localhost:8000/docs" class="btn btn-info" target="_blank">📚 API Docs</a>
+                <a href="index.html" class="btn btn-info">🏠 Back to Contest</a>
+            </div>
+            
+            <div id="message"></div>
+            <div id="submissionsContainer">
+                <div class="loading">Loading submissions...</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE_URL = 'http://localhost:8000';
+        
+        // Load submissions on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            loadSubmissions();
+        });
+        
+        async function loadSubmissions() {
+            const container = document.getElementById('submissionsContainer');
+            const messageDiv = document.getElementById('message');
+            
+            try {
+                container.innerHTML = '<div class="loading">Loading submissions...</div>';
+                messageDiv.innerHTML = '';
+                
+                const response = await fetch(`${API_BASE_URL}/submissions/backup`);
+                const data = await response.json();
+                
+                if (response.ok) {
+                    displaySubmissions(data);
+                    updateStats(data);
+                    showMessage(`Data loaded successfully! (${data.storage_method})`, 'success');
+                } else {
+                    throw new Error(data.detail || 'Failed to load submissions');
+                }
+                
+            } catch (error) {
+                console.error('Error loading submissions:', error);
+                container.innerHTML = '<div class="error">❌ Error loading submissions: ' + error.message + '</div>';
+                showMessage('Failed to load submissions. Make sure the backend is running.', 'error');
+            }
+        }
+        
+        async function syncGoogleSheets() {
+            const container = document.getElementById('submissionsContainer');
+            const messageDiv = document.getElementById('message');
+            
+            try {
+                container.innerHTML = '<div class="loading">🔄 Syncing with Google Sheets...</div>';
+                messageDiv.innerHTML = '';
+                
+                const response = await fetch(`${API_BASE_URL}/submissions/sync`);
+                const data = await response.json();
+                
+                if (response.ok) {
+                    displaySubmissions(data);
+                    updateStats(data);
+                    showMessage('✅ Google Sheets synced successfully!', 'success');
+                } else {
+                    throw new Error(data.detail || 'Failed to sync Google Sheets');
+                }
+                
+            } catch (error) {
+                console.error('Error syncing Google Sheets:', error);
+                container.innerHTML = '<div class="error">❌ Error syncing Google Sheets: ' + error.message + '</div>';
+                showMessage('Failed to sync Google Sheets. Check your connection and credentials.', 'error');
+            }
+        }
+        
+        function displaySubmissions(data) {
+            const container = document.getElementById('submissionsContainer');
+            
+            if (!data.submissions || data.submissions.length === 0) {
+                container.innerHTML = `
+                    <div class="no-submissions">
+                        <h3>📭 No Submissions Yet</h3>
+                        <p>Contest submissions will appear here once users start participating.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            const tableHTML = `
+                <table class="submissions-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Answer</th>
+                            <th>Submitted</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${data.submissions.map(submission => `
+                            <tr>
+                                <td><span class="submission-id">${submission.id}</span></td>
+                                <td><strong>${escapeHtml(submission.name)}</strong></td>
+                                <td>${escapeHtml(submission.email)}</td>
+                                <td class="answer-cell">${escapeHtml(submission.answer)}</td>
+                                <td class="timestamp">${formatTimestamp(submission.submitted_at)}</td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            `;
+            
+            container.innerHTML = tableHTML;
+        }
+        
+        function updateStats(data) {
+            document.getElementById('totalSubmissions').textContent = data.total_submissions || 0;
+            
+            // Update storage method with more details
+            let storageText = 'Unknown';
+            if (data.storage_method === 'google_sheets') {
+                storageText = 'Google Sheets ✅';
+            } else if (data.storage_method === 'local_backup') {
+                storageText = 'Local Backup ⚠️';
+            } else if (data.storage_method === 'none') {
+                storageText = 'No Data ❌';
+            }
+            document.getElementById('storageMethod').textContent = storageText;
+            
+            // Calculate today's submissions
+            const today = new Date().toISOString().split('T')[0];
+            const todaySubmissions = data.submissions ? data.submissions.filter(sub => 
+                sub.submitted_at && sub.submitted_at.startsWith(today)
+            ).length : 0;
+            document.getElementById('todaySubmissions').textContent = todaySubmissions;
+        }
+        
+        function downloadCSV() {
+            fetch(`${API_BASE_URL}/submissions/backup`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.submissions && data.submissions.length > 0) {
+                        const csv = convertToCSV(data.submissions);
+                        downloadFile(csv, 'contest_submissions.csv', 'text/csv');
+                        showMessage('CSV file downloaded successfully!', 'success');
+                    } else {
+                        showMessage('No submissions to download.', 'error');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error downloading CSV:', error);
+                    showMessage('Failed to download CSV.', 'error');
+                });
+        }
+        
+        function convertToCSV(submissions) {
+            const headers = ['ID', 'Name', 'Email', 'Answer', 'Timestamp', 'Submitted At'];
+            const csvRows = [headers.join(',')];
+            
+            submissions.forEach(submission => {
+                const row = [
+                    submission.id,
+                    `"${submission.name}"`,
+                    `"${submission.email}"`,
+                    `"${submission.answer.replace(/"/g, '""')}"`,
+                    submission.timestamp,
+                    submission.submitted_at
+                ];
+                csvRows.push(row.join(','));
+            });
+            
+            return csvRows.join('\n');
+        }
+        
+        function downloadFile(content, filename, contentType) {
+            const blob = new Blob([content], { type: contentType });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+        }
+        
+        function formatTimestamp(timestamp) {
+            if (!timestamp) return 'N/A';
+            const date = new Date(timestamp);
+            return date.toLocaleString();
+        }
+        
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+        
+        function showMessage(message, type) {
+            const messageDiv = document.getElementById('message');
+            messageDiv.innerHTML = `<div class="${type}">${message}</div>`;
+            setTimeout(() => {
+                messageDiv.innerHTML = '';
+            }, 5000);
+        }
+        
+        // Auto-refresh every 30 seconds with sync
+        setInterval(syncGoogleSheets, 30000);
+    </script>
+</body>
+</html>

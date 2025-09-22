@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ANYTIME Contest - Launcher</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .container {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            padding: 40px;
+            text-align: center;
+            max-width: 600px;
+        }
+        .logo {
+            font-size: 3em;
+            font-weight: bold;
+            background: linear-gradient(135deg, #ff6b6b, #ee5a52);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 20px;
+        }
+        .btn {
+            display: inline-block;
+            padding: 15px 30px;
+            margin: 10px;
+            background: linear-gradient(135deg, #4F46E5, #6366F1);
+            color: white;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(79, 70, 229, 0.3);
+        }
+        .btn-secondary {
+            background: linear-gradient(135deg, #00ff88, #00cc6a);
+        }
+        .btn-info {
+            background: linear-gradient(135deg, #4a90e2, #357abd);
+        }
+        .status {
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 8px;
+            font-weight: 600;
+        }
+        .status.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .status.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .instructions {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">🎯 ANYTIME Contest</div>
+        <h2>Website Launcher</h2>
+        
+        <div id="status" class="status">
+            Checking server status...
+        </div>
+        
+        <div class="instructions">
+            <h3>📋 Instructions:</h3>
+            <ol>
+                <li><strong>Start Server:</strong> Make sure the server is running (start_server.bat)</li>
+                <li><strong>Open Contest:</strong> Click "Open Contest Page" to access the main contest</li>
+                <li><strong>Admin Dashboard:</strong> Click "Open Admin Dashboard" to view submissions</li>
+                <li><strong>Server Status:</strong> Check if the server is running on port 8000</li>
+            </ol>
+        </div>
+        
+        <div>
+            <a href="index.html" class="btn">🏠 Open Contest Page</a>
+            <a href="admin_view.html" class="btn btn-secondary">📊 Open Admin Dashboard</a>
+        </div>
+        
+        <div>
+            <button onclick="checkServer()" class="btn btn-info">🔄 Check Server Status</button>
+            <button onclick="openServerURL()" class="btn btn-info">🌐 Open Server URL</button>
+        </div>
+        
+        <div class="instructions">
+            <h3>🔧 Troubleshooting:</h3>
+            <ul>
+                <li>If pages don't load: Make sure server is running</li>
+                <li>If server isn't running: Double-click start_server.bat</li>
+                <li>If browser issues: Try different browser or refresh page</li>
+                <li>For admin access: Use "Sync Google Sheets" button</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // Check server status on page load
+        window.addEventListener('load', checkServer);
+        
+        async function checkServer() {
+            const statusDiv = document.getElementById('status');
+            statusDiv.textContent = 'Checking server status...';
+            statusDiv.className = 'status';
+            
+            try {
+                const response = await fetch('http://localhost:8000/health');
+                if (response.ok) {
+                    const data = await response.json();
+                    statusDiv.textContent = `✅ Server is running! Status: ${data.status}`;
+                    statusDiv.className = 'status success';
+                } else {
+                    throw new Error('Server responded with error');
+                }
+            } catch (error) {
+                statusDiv.textContent = '❌ Server is not running. Please start the server first.';
+                statusDiv.className = 'status error';
+            }
+        }
+        
+        function openServerURL() {
+            window.open('http://localhost:8000', '_blank');
+        }
+        
+        // Auto-refresh server status every 30 seconds
+        setInterval(checkServer, 30000);
+    </script>
+</body>
+</html>
